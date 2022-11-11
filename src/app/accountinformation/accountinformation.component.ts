@@ -1,12 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
-import Validation from './utils/validation';
+import { AbstractControl, FormBuilder,  FormGroup, Validators} from '@angular/forms';
+import { AccountService } from '../service/api.service';
 
 @Component({
   selector: 'app-accountinformation',
@@ -17,10 +12,16 @@ export class AccountinformationComponent implements OnInit {
   form: FormGroup;
   submitted = false;
   router: any;
+  quoteText: string;
+  registerForm: any;
+  accountResult : any;
+  accountList : any;
+  body : any;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder ,  public accountservice : AccountService) {}
 
   ngOnInit(): void {
+    this.getAccounts();
     this.form = this.formBuilder.group(
       {
         firstname: [
@@ -31,8 +32,14 @@ export class AccountinformationComponent implements OnInit {
             Validators.maxLength(20)
           ]
         ],
+        lastname: [
+          '',
+          [
+            Validators.required,
+          ]
+        ],
         email: ['', [Validators.required, Validators.email]],
-        mob: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]]
+        mob: ['', [Validators.required,Validators.pattern('^[0-9]*$')]]
       }
     );
   
@@ -50,20 +57,26 @@ export class AccountinformationComponent implements OnInit {
       return;
     }
 
-    console.log(JSON.stringify(this.form.value, null, 2));
   }
 
   onReset(): void {
     this.submitted = false;
     this.form.reset();
   }
-  onaddDetails(){
-    
-    if(this.form.valid){
+  onaddDetails() : any {
+    if (this.form.valid) {
+      this.body = this.form.value;
+      this.accountservice.createAccount(this.body).subscribe((response: any) => {
+        console.log(response);
+      });
+    }
+  }
+  getAccounts() {
+    this.accountservice. getAccounts().subscribe((data : any[]) => {
+       this.accountResult = data;
+       this.accountList = this.accountResult.results;
+       console.log(this.accountResult);
+    });
+  }
 
-    this.router.navigate(['/loan-dashboard']);
-
-        }
-
-     }
 }

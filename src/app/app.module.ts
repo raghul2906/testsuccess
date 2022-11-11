@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { HttpClientModule } from '@angular/common/http';
+import { AccountService } from './service/api.service';
 //Material
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
@@ -26,7 +27,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { LoanDashboardComponent } from './loan-dashboard/loan-dashboard.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-
+import { AccountinformationComponent } from './accountinformation/accountinformation.component';
 
 
 
@@ -35,8 +36,8 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
     AppComponent,
     routingComponents,
     LoanDashboardComponent,
-    MyProfileComponent
-
+    AccountinformationComponent,
+    MyProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,11 +60,10 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
     MatCardModule,
     MatMenuModule ,
     ReactiveFormsModule,
-    MatFormFieldModule
-  
-
+    MatFormFieldModule, 
   ],
-  providers: [],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
+  providers: [AccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,52 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
-import Validation from './utils/validation';
-import { Router, RouterLink } from '@angular/router';
-
+import { AbstractControl, FormBuilder,  FormGroup, Validators} from '@angular/forms';
+import {  ProfileService } from '../service/profile.service';
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.css']
 })
-export class MyProfileComponent implements OnInit {
+export class MyProfileComponent implements OnInit  {
   form: FormGroup;
   submitted = false;
   router: any;
+  quoteText: string;
+  registerForm: any;
+  profileResult : any;
+  profileList : any;
+  body : any;
 
-  constructor(private formBuilder: FormBuilder ) {}
+  constructor(private formBuilder: FormBuilder , public profileservice : ProfileService ) {}
 
-
-
-
-//   // City Names
-// City: any = ['India', 'USA', 'UK', 'Australia','Sweden','Iceland']
-
-
-// /*########### Form ###########*/
-// registrationForm = this.formBuilder.group({
-//   cityName: ['', [Validators.required]]
-// })
-
-
-// // Choose city using select dropdown
-// changeCity(e) {
-//   console.log(e.value)
-//   this.cityName.setValue(e.target.value, {
-//     onlySelf: true
-//   })
-// }
-
-// // Getter method to access formcontrols
-// get cityName() {
-//   return this.form.get('cityName');
-// }
 
 ngOnInit(): void {
+  this.getProfiles();
   this.form = this.formBuilder.group(
     {
       firstname: [
@@ -57,6 +31,13 @@ ngOnInit(): void {
           Validators.maxLength(20)
         ]
       ],
+      lastname: [
+        '',
+        [
+          Validators.required,
+        ]
+      ],
+      'region': [],
       email: ['', [Validators.required, Validators.email]],
     }
   );
@@ -72,12 +53,9 @@ model : any ;
 
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
-
-    console.log(JSON.stringify(this.form.value, null, 2));
   }
 
 
@@ -86,17 +64,22 @@ model : any ;
     this.form.reset();
   } 
 
-  onaddDetails(){
+  onaddDetails() : any {
+    if (this.form.valid) {
+      this.body = this.form.value;
+      this.profileservice.createProfile(this.body).subscribe((response: any) => {
+        console.log(response);
+      });
+    }
+  }
 
-
-
-    if(this.form.valid){
-
-    this.router.navigate(['/accountinformation']);
-
-        }
-
-     }
+     getProfiles() {
+      this.profileservice. getProfiles().subscribe((data : any[]) => {
+         this.profileResult = data;
+         this.profileList = this.profileResult.results;
+         console.log(this.profileResult);
+      });
+    }
 
 }
 

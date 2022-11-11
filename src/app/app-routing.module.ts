@@ -3,14 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountinformationComponent } from './accountinformation/accountinformation.component';
 import { LoanDashboardComponent } from './loan-dashboard/loan-dashboard.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-const routes: Routes = [
+export const routes: Routes = [
   {
     path:"", component:LoanDashboardComponent,
-    
   },
   {
-    path:"loan-dashboard", component:LoanDashboardComponent,
-    
+    path:"loan-dashboard", component:LoanDashboardComponent,  
   },
   {
     path:"my-profile", component:MyProfileComponent,
@@ -22,7 +20,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule ]
 })
 export class AppRoutingModule { }
 export const routingComponents =[LoanDashboardComponent , MyProfileComponent , AccountinformationComponent]
